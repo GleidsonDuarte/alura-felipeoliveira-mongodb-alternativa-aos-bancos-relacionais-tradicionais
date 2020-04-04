@@ -1,0 +1,273 @@
+# CURSO ALURA
+
+## MongoDB: Uma alternativa aos bancos relacionais tradicionais
+
+# Cria uma coleção de dados com o nome "alunos".
+db.createCollection("alunos");
+
+# Insere um registro na coleção "alunos".
+db.alunos.insert(
+	{
+		"nome" : "Felipe",
+		"data_nascimento" : new Date(1994,02,26),
+	}
+);
+
+# Insere um registro na coleção "alunos".
+db.alunos.insert(
+	{
+		"nome" : "Felipe",
+		"data_nascimento" : new Date(1994,02,26),
+		"curso" : {
+			"nome" : "Sistemas de informação"
+		},
+		"notas" : [10.0, 9.0, 4.5],
+		"habilidades" : [
+			{
+				"nome" : "inglês",
+				"nível" : "avançado"
+			},
+			{
+				"nome" : "taekwondo",
+				"nível" : "básico"
+			}
+		]
+	}
+);
+
+# Consulta todos os registros da coleção "alunos".
+db.alunos.find();
+
+# Remove um registro da coleção "alunos" pela chave "_id".
+db.alunos.remove(
+	{
+		"_id" : ObjectId("5e870f71a70b4dde26252914")
+	}
+);
+
+# Insere um registro na coleção "alunos".
+db.alunos.insert(
+	{
+		"nome" : "Julio",
+		"data_nascimento" : new Date(1972, 08, 30),
+		"curso" : {
+			"nome" : "Medicina"
+		},
+		"habilidades" : [
+			{
+				"nome" : "inglês",
+				"nível" : "avançado"
+			}
+		]
+	}
+);
+
+# Insere um registro na coleção "alunos".
+db.alunos.insert(
+	{
+		nome : "Alberto",
+		data_nascimento : new Date(1972, 09, 30),
+		curso : {
+			nome : "Engenharia Química"
+		},
+		habilidades : [
+			{
+				nome : "inglês",
+				nível : "intermediário"
+			}
+		]
+	}
+);
+
+# Insere um registro na coleção "alunos".
+db.alunos.insert(
+	{
+		nome : "Daniela",
+		data_nascimento : new Date(1995, 09, 30),
+		curso : {
+			nome : "Moda"
+		},
+		habilidades : [
+			{
+				nome : "alemão",
+				nível : "básico"
+			}
+		]
+	}
+);
+
+# Consulta todos os registros da coleção "alunos" e retorna o resultado todo formatado.
+db.alunos.find().pretty();
+
+# Consulta e filtra todos os registros que tenham chave "nome" igual a "Felipe".
+db.alunos.find(
+	{
+		"nome" : "Felipe"
+	}
+).pretty();
+
+# Consulta e filtra pelas chaves "nome" e "data_nascimento".
+db.alunos.find(
+	{
+		"nome": "Felipe",
+		"data_nascimento": new Date(1994, 02, 26)
+	}
+).pretty();
+
+# Consulta e filtra todos os registros que tenham chave "habilidades.nome" de igual a "alemão".
+db.alunos.find(
+	{
+		"habilidades.nome" : "alemão"
+	}
+).pretty();
+
+# Consulta e filtra usando "OR".
+db.alunos.find(
+	{
+		$or : [
+			{"curso.nome" : "Sistemas de informação"},
+			{"curso.nome" : "Engenharia Química"}
+		]
+	}
+).pretty();
+
+# Consulta e filtra usando "AND".
+## Quando os valores são passados e separados por ',' o "AND" acaba sendo utilizado implicitamente, mas o mesmo pode ser utilizado explicitamente também.
+db.alunos.find(
+	{
+		"nome" : "Daniela",
+		$or : [
+			{"curso.nome" : "Sistemas de informação"},
+			{"curso.nome" : "Engenharia Química"},
+			{"curso.nome" : "Moda"},
+		]
+	}
+).pretty();
+
+# Consulta e filtra usando "IN".
+db.alunos.find(
+	{
+		"curso.nome" : {
+			$in : [
+				"Sistemas de Informação",
+				"Engenharia Química"
+			]
+		}
+	}
+);
+
+# Realizar uma multipla atualização de dados.
+## Por padrão se não for especificado a propriedade "multi" o UPDATE atualizará apenas o primeiro registro encontrado, ainda que mais registros que caiam no filtro.
+db.alunos.update(
+	{"curso.nome" : "Sistemas de informação"},
+	{
+		$set : {
+			"curso.nome" : "Sistemas De Informação"
+		}
+	},
+	{
+		multi : true
+	}
+);
+
+# Faz uma atualização no registro e adiciona um valor a uma chave "notas".
+db.alunos.update(
+	{_id : ObjectId("5e872471d1b18594fa354606")},
+	{
+		$push : {
+			notas : 8.5
+		}
+	}
+);
+
+# Faz uma atualização no registro e adiciona os valor um a um na chave "notas" com a propriedade "each".
+db.alunos.update(
+	{_id : ObjectId("5e872471d1b18594fa354606")},
+	{
+		$push : {
+			notas : {
+				$each : [8.5, 3]
+			}
+		}
+	}
+);
+
+# Utiliza a chave "gt" para filtrar registro que tiverem "notas" maiores que "5".
+db.alunos.find(
+	{
+		notas : { $gt : 5 }
+	}
+);
+	
+# Insere um registro na coleção "alunos".
+db.alunos.insert(
+	{
+		nome : "André",
+		data_nascimento : new Date(1991, 01, 25),
+		curso : {
+			nome : "Matemática"
+		},
+		notas : [ 7, 5, 9, 4.5 ]
+	}
+);
+
+# Insere um registro na coleção "alunos".
+db.alunos.insert(
+	{
+		nome : "Lúcia",
+		data_nascimento : new Date(1984, 07, 17),
+		curso : {
+			nome : "Matemática"
+		},
+		notas : [ 8, 9.5, 10 ]
+	}
+);
+
+# Consulta apenas um registro que tiverem "notas" maiores que "5".
+db.alunos.findOne(
+	{
+		notas : { $gt : 5 }
+	}
+);
+
+# Faz uma consulta e os ordena com a chave "sort" em ordem descrescente "-1".
+db.alunos.find().sort({"nome": -1});
+	
+# Limita o retorna da consulta em três registros com a chave "limit" igual a 3 e os ordena em ordem crescente com "sort" igual a "1".
+db.alunos.find().sort({"nome": 1}).limit(3);
+
+# Consulta apenas um registro que tiverem "notas" menores que "5".
+db.alunos.find(
+	{
+		notas: { $lt : 5 }
+	}
+);
+
+# Importa os registros contidos no array dentro do arquivo "alunos.json".
+# Executar esse comando no bash e não dentro do mongo.
+mongoimport -c alunos --jsonArray < alunos.json
+
+# Cria um indice na chave "localizacao" dizendo que a chave é uma esfera em 2D.
+db.alunos.createIndex(
+	{
+		localizacao : "2dsphere"
+	}
+);
+
+# Realiza de registros por proximidade.
+db.alunos.aggregate(
+	[
+		{
+			$geoNear : {
+				near : {
+					coordinates : [-23.5640265, -46.6527128],
+					type : "Point"
+				},
+				distanceField : "distancia.calculada",
+				spherical : true
+			}
+		},
+		{ $limit : 4 },
+		{ $skip : 1 }
+	]
+);
